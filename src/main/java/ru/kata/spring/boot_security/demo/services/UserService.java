@@ -12,8 +12,8 @@ import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -32,19 +32,19 @@ public class UserService implements UserDetailsService {
         this.roleRepository = roleRepository;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
+//    public User findByUsername(String username) {
+//        return userRepository.findByUsername(username);
+//    }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' ne naiden", username));
-        }
-        return (UserDetails) user;
-
+//        User user = findByUsername(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException(String.format("User '%s' ne naiden", username));
+//        }
+//        return (UserDetails) user;
+return null;
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
@@ -81,6 +81,23 @@ public class UserService implements UserDetailsService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
+@Transactional(readOnly = true)
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+
+        User user = findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+    }
+
+    public User findByEmail(String email) {
+        return   userRepository.findByEmail(email);
+    }
+
+
 
 
 }

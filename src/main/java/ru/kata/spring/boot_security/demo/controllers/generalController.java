@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -46,8 +48,9 @@ public class generalController {
 
     @GetMapping("/user")
     public String user(Model model, Authentication authentication) {
-        String username = authentication.getName();
-        User user = userService.findByUsername(username);
+        String email = authentication.getName();
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"+ email);
+        User user = userService.findByEmail(email);
         model.addAttribute("user", user);
         return "user";
     }

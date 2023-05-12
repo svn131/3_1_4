@@ -38,8 +38,8 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
         createRoleIfNotFound("ROLE_ADMIN");
         createRoleIfNotFound("ROLE_USER");
 
-        createUserIfNotFound("user", "1111", "john.doe@example.com", Arrays.asList("ROLE_USER"));
-        createUserIfNotFound("admin", "1111", "admin@example.com", Arrays.asList("ROLE_ADMIN"));
+        createUserIfNotFound( "1111", "john.doe@example.com", Arrays.asList("ROLE_USER"));
+        createUserIfNotFound( "1111", "admin@example.com", Arrays.asList("ROLE_ADMIN"));
 
         alreadySetup = true;
     }
@@ -55,11 +55,10 @@ public class DataInitializer implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    void createUserIfNotFound(String username, String password, String email, List<String> roles) {
-        User user = userService.findByUsername(username);
+    void createUserIfNotFound( String password, String email, List<String> roles) {
+        User user = userService.findByEmail(email);
         if (user == null) {
             user = new User();
-            user.setUsername(username);
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
             List<Role> userRoles = new ArrayList<>();

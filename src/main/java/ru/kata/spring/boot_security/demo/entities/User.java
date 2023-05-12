@@ -20,17 +20,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
     private String password;
 
-    private String email;
+    public String email;
 
     private String firstName;
 
     private String lastName;
 
     private Long age;
+
+
+
+
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -46,6 +49,11 @@ public class User implements UserDetails {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
     }
 
     @Override
@@ -67,5 +75,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 }
